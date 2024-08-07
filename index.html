@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>WeatherApp</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #e0f7fa;
+        }
+
+        .box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .wave-one, .wave-two, .wave-three {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: animate 30s linear infinite;
+        }
+
+        .wave-two {
+            animation-delay: -15s;
+        }
+
+        .wave-three {
+            animation-delay: -30s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .weathercon {
+            font-size: 6rem;
+            color: #13f5fd;
+            text-align: center;
+        }
+
+        .info {
+            text-align: center;
+        }
+
+        .location {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .temp {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        .tempmax-min {
+            font-size: 1.5rem;
+            color: #555;
+        }
+
+        #date {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="wave-one"></div>
+        <div class="wave-two"></div>
+        <div class="wave-three"></div>
+    </div>
+    <div class="info">
+        <div id="weathercon" class="weathercon">
+            <i class="fa-regular fa-sun"></i>
+        </div>
+        <h2 class="location"><i class="fa-solid fa-street-view"></i> {%location%}, {%country%}</h2>
+        <p id="date">OCT 23 | 10:43</p>
+        <h1 class="temp">{%tempval%}</h1>
+        <h3 class="tempmax-min">Min {%tempmin%} | Max {%tempmax%}</h3>
+    </div>
+    <script>
+        const curDate = document.getElementById("date");
+        const weathercon = document.getElementById("weathercon");
+        const tempstatus = "{%tempstatus%}";
+
+        if (tempstatus === "Clouds") {
+            weathercon.innerHTML = '<i class="fa-solid fa-cloud"></i>';
+        } else if (tempstatus === "Rain") {
+            weathercon.innerHTML = '<i class="fa-solid fa-cloud-showers-heavy"></i>';
+        } else if (tempstatus === "Thunderstorm") {
+            weathercon.innerHTML = '<i class="fa-solid fa-bolt"></i>';
+        } else {
+            weathercon.innerHTML = '<i class="fa-regular fa-sun"></i>';
+        }
+
+        const getCurrentDay = () => {
+            const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+            let currentTime = new Date();
+            let day = weekday[currentTime.getDay()];
+            return day;
+        };
+
+        const getCurrentTime = () => {
+            const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            let now = new Date();
+            let Month = month[now.getMonth()];
+            let date = now.getDate();
+            let hours = now.getHours();
+            let mins = now.getMinutes();
+            let period = "AM";
+
+            if (hours > 11) {
+                period = "PM";
+                if (hours > 12) hours -= 12;
+            }
+
+            if (mins < 10) {
+                mins = "0" + mins;
+            }
+
+            return `${Month} ${date} | ${hours}:${mins} ${period}`;
+        };
+
+        curDate.innerHTML = getCurrentDay() + " | " + getCurrentTime();
+    </script>
+</body>
+</html>
